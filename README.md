@@ -10,8 +10,8 @@ Step 0: Download the csv files from the HSBC website and install the required mo
 Step 1: Create a folder called statement in the root directory and put the midata.csv and tranhist.csv file in the statement folder.<br>
 Step 2: Run the midata.py file and copy the result (./statement/midata_tranhist.csv) and paste it to the bottom of tranhist.csv.<br>
 (Optional Step: update categoriesjson in category.py to fit your record better)<br> 
-Step 3: Set up your own MySQL local/global database and table (creating table command is available in dbInput.py)
-Step 3: Run the dbInput.py file. (uncomment the insert line)<br>
+Step 3: Set up your own MySQL local/global database and table (creating table command is available in dbInput.py) <br>
+Step 4: Run the dbInput.py file. (uncomment the insert line)<br>
 
 
 <h4> Section 2:Web interface</h4>
