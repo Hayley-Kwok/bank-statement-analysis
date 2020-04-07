@@ -1,0 +1,17 @@
+/* Main css File */
+tr:hover{
+  background-color:#B8D2FC   !important;
+}
+.container{
+  padding:60px 20px;
+}
+a:link,a:visited,a:active{
+  text-decoration: none;
+  color: white;
+}
+.nav-item{
+  margin-right: 20px;
+}
+h1{
+  margin-bottom:20px;
+}

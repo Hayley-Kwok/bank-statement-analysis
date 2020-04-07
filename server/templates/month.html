@@ -1,0 +1,165 @@
+<!-- Page showing all (full) records (include the excluded one) of the selected month  -->
+{% extends 'base.html' %}
+
+{% block title %}Details for {{month}}{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+  google.charts.load('current', {'packages':['table']});
+  
+  google.charts.setOnLoadCallback(drawAllTable);
+  google.charts.setOnLoadCallback(drawCreditTable);
+  google.charts.setOnLoadCallback(drawDebitTable);
+
+  // Table for all records
+  function drawAllTable() {
+    var data = new google.visualization.DataTable();
+    data.addColumn('number', 'id');
+    data.addColumn('string', 'Date');
+    data.addColumn('string', 'Month');
+    data.addColumn('string', 'Store');
+    data.addColumn('number', 'Amount');
+    data.addColumn('string', 'Category');
+    data.addColumn('string', 'Value');
+    data.addColumn('string', 'Method');
+    data.addColumn('string', 'Ref');
+    data.addColumn('string', 'Notes');
+    data.addColumn('number', 'Excluded');
+    var allResult = {{allResult | tojson}};
+    data.addRows(allResult);
+    
+    var table = new google.visualization.Table(document.getElementById('allTable'));
+    table.draw(data, {showRowNumber: true, width: '100%', height: '100%'});
+
+    google.visualization.events.addListener(table, 'select', function() {
+      var row = table.getSelection()[0].row;
+      var id = data.getValue(row,0);
+      var confirmValue = confirm("Do u want to edit the record with the Id "+id);
+      if (confirmValue == true){
+        location.href = "/"+id;
+      }
+    });
+    
+  }
+  // Table for debit records
+  function drawDebitTable() {
+    var data = new google.visualization.DataTable();
+    data.addColumn('number', 'id');
+    data.addColumn('string', 'Date');
+    data.addColumn('string', 'Month');
+    data.addColumn('string', 'Store');
+    data.addColumn('number', 'Amount');
+    data.addColumn('string', 'Category');
+    data.addColumn('string', 'Value');
+    data.addColumn('string', 'Method');
+    data.addColumn('string', 'Ref');
+    data.addColumn('string', 'Notes');
+    data.addColumn('number', 'Excluded');
+    var allResult = {{debitResult | tojson}};
+    data.addRows(allResult);
+    
+    var table = new google.visualization.Table(document.getElementById('debitTable'));
+    table.draw(data, {showRowNumber: true, width: '100%', height: '100%'});
+
+    google.visualization.events.addListener(table, 'select', function() {
+      var row = table.getSelection()[0].row;
+      var id = data.getValue(row,0);
+      var confirmValue = confirm("Do u want to edit the record with the Id "+id);
+      if (confirmValue == true){
+        location.href = "/"+id;
+      }
+    });
+  }
+  // Table for credit records
+  function drawCreditTable() {
+    var data = new google.visualization.DataTable();
+    data.addColumn('number', 'id');
+    data.addColumn('string', 'Date');
+    data.addColumn('string', 'Month');
+    data.addColumn('string', 'Store');
+    data.addColumn('number', 'Amount');
+    data.addColumn('string', 'Category');
+    data.addColumn('string', 'Value');
+    data.addColumn('string', 'Method');
+    data.addColumn('string', 'Ref');
+    data.addColumn('string', 'Notes');
+    data.addColumn('number', 'Excluded');
+    var allResult = {{creditResult | tojson}};
+    data.addRows(allResult);
+    
+    var table = new google.visualization.Table(document.getElementById('creditTable'));
+    table.draw(data, {showRowNumber: true, width: '100%', height: '100%'});
+
+    google.visualization.events.addListener(table, 'select', function() {
+      var row = table.getSelection()[0].row;
+      var id = data.getValue(row,0);
+      var confirmValue = confirm("Do u want to edit the record with the Id "+id);
+      if (confirmValue == true){
+        location.href = "/"+id;
+      }
+    });
+  }      
+      
+  
+  
+</script>
+{% endblock %}
+
+{% block nav_buttons %}
+  <li class="nav-item navbar-right">
+    <a href="#summary">Summary</a>
+  </li>
+  <li class="nav-item navbar-right">
+    <a href="#all">All</a>
+  </li>
+  <li class="nav-item navbar-right">
+    <a href="#credit">Credit</a>
+  </li>
+  <li class="nav-item navbar-right">
+    <a href="#debit">Debit</a>
+  </li>
+  <li class="nav-item navbar-right">
+    <a href="/breakdown?month={{month}}">Breakdown</a>
+  </li>
+{% endblock %}
+
+{% block main %}
+<div class="text-center" id="entire">
+  <!-- Table for summary -->
+  {%if summary is defined %}
+    <div class="container" id="summary">
+      <h1>Summary</h1>
+      <table class="table table-striped">
+        <tr>
+          <th>Total Debit</th>
+          <th>Total Credit</th>
+          <th>Balance</th>
+        </tr>
+        <tr>
+          {% for item in summary %}
+            {% if item is number %}
+              <td>{{ "%.2f"|format(item) }}</td>
+            {%else%}
+              <td>{{ item }}</td>
+            {%endif%}
+          {% endfor %}
+        </tr>
+      </table>
+    </div>
+  {%endif%}
+  <div class="container" id="all">
+    <h1> All Records</h1>
+    <div id="allTable"></div>
+  </div>
+  <div class="container" id="credit">
+    <h1> Credit Records</h1>
+    <div id="creditTable"></div>
+  </div>
+  <div class="container" id="debit">
+    <h1> Debit Records</h1>
+    <div  id="debitTable"></div>
+  </div>
+</div>
+{% endblock %}
+  

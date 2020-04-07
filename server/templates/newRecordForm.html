@@ -1,0 +1,105 @@
+<!-- form for creating all records -->
+{% extends 'base.html' %}
+
+{% block title %}Create a New Record{% endblock %}
+{% block script %}
+<script>
+function addCategory(){
+  var inputVal = document.getElementById("categoryInput").value;
+  var newOption='<option value="'+inputVal+'">'+inputVal+"</option>";
+  document.getElementById('categories').innerHTML+=newOption;
+}
+function updateValue(){
+  var amount = document.getElementById("amount").value;
+  var temp = "Debit";
+  if (amount > 0){
+    temp = "Credit";
+  }
+  document.getElementById('value').value=temp;
+}
+</script>
+
+
+{% endblock %}
+
+
+{% block main %}
+<div class="container">
+  <h1 class='text-center'> Create a New Record</h1>
+  <form action="addRecord" method="post" id="newRecordForm">
+    <div class="form-group">
+      <label for="date">Date: (in the format yyyy-mm-dd)</label>
+      <input class="form-control" type="text" id="date" name="date" placeholder="yyyy-mm-dd" required><br>
+    </div>
+
+    <div class="form-group">
+      <label for="month">Month: (in the format mm-yyyy)</label>
+      <input class="form-control" type="text" id="month" name="month" placeholder="mm-yyyy" required><br>
+    </div>
+
+    <div class="form-group">
+      <label for="store">Store: </label>
+      <input class="form-control" type="text" id="store" name="store" required><br>
+    </div>
+
+    <div class="form-group">
+      <label for="amount">Amount: </label>
+      <input class="form-control" type="number" step="0.01" id="amount" name="amount" onchange="updateValue()" required><br>
+    </div>
+
+    <div class="form-group">
+      <label for="category">Category: </label>
+      <div class="col-md-10">
+        <div class="input-group mb-3">
+          <input id="categoryInput" type="text" class="form-control" placeholder="Add a new Category" aria-label="new category" aria-describedby="basic-addon2">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" onclick="addCategory()">Add Category to list</button>
+          </div>
+        </div>
+        <label>Existing Categories: </label>
+        <select class="custom-select" id="categories" name="categories" form="newRecordForm" required >
+          {%for category in categories %}
+            <option value="{{category[0]}}">{{category[0]}}</option>
+          {%endfor%}
+        </select>
+        <br>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="value">Value: </label>
+      <input class="form-control" type="text" id="value" name="value" readonly><br>
+    </div>
+
+    <div class="form-group">
+      <label for="method">Method: </label>
+      <select class="custom-select" id="methods" form="newRecordForm" name="methods" required>
+        <option value="card" selected>Card</option>
+        <option value="cash">Cash</option>
+        <option value="paypal credit">Paypal Credit</option>
+        <option value="paypal debit">Paypal Debit</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="ref">Ref: </label>
+      <input class="form-control" type="text" id="ref" name="ref" ><br>
+    </div>
+
+    <div class="form-group">
+      <label for="notes">Notes: </label>
+      <input class="form-control" type="text" id="notes" name="notes"><br>
+    </div>
+
+    <div class="form-check">
+      <label class="form-check-label">Excluded: </label>
+        <label class="form-check-label"><input type="radio" id="radio" name="radio" value="True"> True </label>
+        <label class="form-check-label"><input type="radio" id="radio" name="radio" value="False" checked="checked"> False </label>
+    </div>
+    <div class="container">
+      <button type="submit" class="btn btn-info" >Submit</button>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

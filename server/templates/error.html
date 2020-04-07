@@ -1,0 +1,14 @@
+<!-- Tailored Error Page -->
+{% extends 'base.html' %}
+
+{% block title %}{{error}}{% endblock %}
+
+{% block main %}
+
+<div class="container text-center">
+  <h1> {{error}} </h1>
+  <p>{{message}} Don't crash the system please 🤫. <br> Go back to homepage. This is an order!!</p>
+  <button class="btn btn-info" href="/">Back to Home </button>
+</div>
+
+{% endblock %}
