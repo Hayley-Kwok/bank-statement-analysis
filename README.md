@@ -19,5 +19,5 @@ All you need to do is run ./server/app.py and access the corresponding localhost
 
 <h3>Required Modules </h3>
 <ul><li>Flask</li>
-<li>MySQL server</li></ul>
+<li>MySQL server</li></ul><br>
 Basic MySQL knowledge is required as you have to build your own database table. 
