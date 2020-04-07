@@ -32,4 +32,5 @@ def outputCsv(data):
 if __name__ == "__main__":
   data = getData()
   print(data)
-  # outputCsv(data)
+  outputCsv(data)
+

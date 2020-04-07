@@ -190,12 +190,12 @@ def breakdown():
 
 
 	#store analysis debit
-	sql="SELECT store,SUM(Amount) FROM analysised WHERE Month = %s AND Excluded = False AND Amount < 0 group by store;"
+	sql="SELECT store,SUM(Amount) FROM "+table+" WHERE Month = %s AND Excluded = False AND Amount < 0 group by store;"
 	mycursor.execute(sql,sqlMonth)
 	storeDebit = mycursor.fetchall()
 
 	#store analysis credit
-	sql="SELECT store,SUM(Amount) FROM analysised WHERE Month = %s AND Excluded = False AND Amount > 0 group by store;"
+	sql="SELECT store,SUM(Amount) FROM "+table+" WHERE Month = %s AND Excluded = False AND Amount > 0 group by store;"
 	mycursor.execute(sql,sqlMonth)
 	storeCredit = mycursor.fetchall()
 
