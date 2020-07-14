@@ -1,9 +1,10 @@
 # Bank Statement Analysis
 
 <h3> Some Screen Captures </h3>
-![Screen Capture](https://user-images.githubusercontent.com/47830627/87480643-a60a3d80-c625-11ea-9672-b2223292a9db.PNG)
-<br><br>
-![Screen Capture](https://user-images.githubusercontent.com/47830627/87480712-ce923780-c625-11ea-8d3c-b4fd0a0b6ac0.PNG)
+
+
+![breakdown](https://user-images.githubusercontent.com/47830627/87481170-bbcc3280-c626-11ea-8620-d0b5e7d5a340.PNG)
+
 
 <h3> What is this project about ? </h3>
 This project composed of two section, analysis bank statement data and a web interface to show the analysised data and edit records.
