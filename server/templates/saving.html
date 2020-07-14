@@ -1,0 +1,106 @@
+<!-- Page that show savings, salary and bills of all months-->
+{% extends 'base.html' %}
+
+{% block title %}Saving{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load('current', {'packages':['corechart','table']});
+    google.charts.setOnLoadCallback(drawSavingChart);
+    google.charts.setOnLoadCallback(drawSavingTable);
+    google.charts.setOnLoadCallback(drawSalaryTable);
+    google.charts.setOnLoadCallback(drawBillsTable);
+    
+    function drawSavingChart() {
+        var dataArray = new Array(
+            ['Month', 'Amount']
+        );
+
+        var savings = {{savings|tojson}};
+        for (var i = 0; i<savings.length; i++){
+            dataArray.push(savings[i]);
+        }
+
+        var data = google.visualization.arrayToDataTable(dataArray);
+
+        var options = {
+            title: 'Total Saving',
+            hAxis: {title: "Amount"},
+            vAxis: {title: "Month",minValue: 0}
+        };
+
+        var chart = new google.visualization.AreaChart(document.getElementById('saving-chart'));
+        chart.draw(data, options);
+    }
+    // Table showing the saving records
+    function drawSavingTable() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Month');
+        data.addColumn('number', 'Amount');
+    
+        var allResult = {{savings | tojson}};
+        data.addRows(allResult);
+        
+        var table = new google.visualization.Table(document.getElementById('saving-table'));
+        table.draw(data, {showRowNumber: true, width: '80%', height: '50%'});
+    }
+
+    // Table showing the saving records
+    function drawSalaryTable() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Month');
+        data.addColumn('string', 'Store');
+        data.addColumn('number', 'Amount');
+        data.addColumn('string', 'Notes');
+    
+        var allResult = {{salary | tojson}};
+        data.addRows(allResult);
+        
+        var table = new google.visualization.Table(document.getElementById('salary-table'));
+        table.draw(data, {showRowNumber: true, width: '80%', height: '50%'});
+    }
+
+    // Table showing the bills records
+    function drawBillsTable() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Month');
+        data.addColumn('string', 'Store');
+        data.addColumn('number', 'Amount');
+        data.addColumn('string', 'Notes');
+    
+        var allResult = {{bills | tojson}};
+        data.addRows(allResult);
+        
+        var table = new google.visualization.Table(document.getElementById('bills-table'));
+        table.draw(data, {showRowNumber: true, width: '80%', height: '50%'});
+    }
+</script>
+
+{%endblock%}
+
+{%block main%}
+<div class="container text-center">
+    <h3>Saving </h3>
+    <div class="row">
+        <div class="col-md-7" id="saving-chart" style="width: 100%; height: 500px;"></div>
+        <div class="col-md-5">
+            <br><br><br>
+            <div id="saving-table"></div>
+            <br>
+            <p>Total Saving:  {{sums}}</p>
+        </div>
+    </div>
+    <h3>Salary</h3>
+    <div class="text-center">
+        <br>
+        <div id="salary-table"></div>
+    </div>
+    <br><br>
+    <h3>Bills</h3>
+    <div class="text-center">
+        <br>
+        <div id="bills-table"></div>
+    </div>
+</div>
+{%endblock%}

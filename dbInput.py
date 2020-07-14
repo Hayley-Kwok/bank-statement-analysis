@@ -4,10 +4,8 @@ import mysql.connector as mysql
 from dbconfig import dbConfig
 
 
-#CREATE TABLE                                                                                                                     
-# mycursor.execute("CREATE TABLE analysised (id INT AUTO_INCREMENT PRIMARY KEY, Date VARCHAR(255) NOT NULL, Month VARCHAR(255) NOT NULL, Store VARCHAR(255) NOT NULL, Amount FLOAT NOT NULL, Category VARCHAR(255) NOT NULL,Value VARCHAR(255) NOT NULL, Payment_Method VARCHAR(255) NOT NULL,Ref VARCHAR(255), Notes VARCHAR(255),Excluded BOOLEAN);")
-
 table = "analysised" #set this to the table name u created
+
 #get the data from the setUp method of readData.py and save it to the dbInput list
 def getdbInput(data,months):
   dbInput = []
@@ -26,7 +24,7 @@ def insert(dbInput,mycursor,conn):
 
   conn.commit()
 
-  print(mycursor.rowcount, "was inserted.")
+  print(mycursor.rowcount, "lines was inserted.")
 
 
 if __name__ == "__main__":
@@ -34,7 +32,10 @@ if __name__ == "__main__":
   conn = mysql.connect(**dbConfig)
   mycursor = conn.cursor()
 
-  #insert
+  #CREATE TABLE                                                                                                                     
+  # mycursor.execute("CREATE TABLE analysised (id INT AUTO_INCREMENT PRIMARY KEY, Date VARCHAR(255) NOT NULL, Month VARCHAR(255) NOT NULL, Store VARCHAR(255) NOT NULL, Amount FLOAT NOT NULL, Category VARCHAR(255) NOT NULL,Value VARCHAR(255) NOT NULL, Payment_Method VARCHAR(255) NOT NULL,Ref VARCHAR(255), Notes VARCHAR(255),Excluded BOOLEAN);")
+  
+  #put the data from ./statement/tranhist.csv (default value) into the database 
   (data,months,amountDict)=setUp()
   dbInput = getdbInput(data,months)
   insert(dbInput,mycursor,conn)

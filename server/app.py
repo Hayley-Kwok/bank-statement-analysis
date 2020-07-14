@@ -15,9 +15,6 @@ def home():
 	conn =mysql.connect(**dbConfig)
 	mycursor = conn.cursor()
 
-	mycursor.execute("SELECT * FROM "+table+";")
-	selectResult = mycursor.fetchall()
-
 	mycursor.execute("SELECT DISTINCT Month FROM "+table+";")
 	months = mycursor.fetchall()
 
@@ -233,6 +230,33 @@ def addRecord():
 	conn.close
 	return render_template("success.html",affectedRows=affectedRows)
 	
+#page to show bills, saving and salary
+@app.route('/saving')
+def saving():
+	conn = mysql.connect(**dbConfig)
+	mycursor = conn.cursor()
+
+	#get all saving records
+	sql="SELECT Month,Amount FROM "+table+" WHERE Category = 'Saving';"
+	mycursor.execute(sql)
+	savings = mycursor.fetchall()
+
+	#get the sum of saving
+	savingSum = 0
+	for s in savings:
+		savingSum += s[1]
+	
+	#get all salary records
+	sql="SELECT Month,Store,Amount,Notes FROM "+table+" WHERE Category = 'Salary';"
+	mycursor.execute(sql)
+	salary = mycursor.fetchall()
+
+	#get all bill records
+	sql="SELECT Month,Store,Amount,Notes FROM "+table+" WHERE Category = 'Bills';"
+	mycursor.execute(sql)
+	bills = mycursor.fetchall()
+	
+	return render_template('saving.html',savings=savings,salary=salary,bills=bills, sums=round(savingSum,2))
 
 #error handling
 @app.errorhandler(404)
@@ -245,6 +269,6 @@ def server_error(e):
 
 def handle_bad_request(e):
     return render_template('error.html',error="Error Occuried",message="An error occuried."), 400
-app.register_error_handler(400, handle_bad_request)
+app.register_error_handler(404, handle_bad_request)
 
 app.run(debug=True)
