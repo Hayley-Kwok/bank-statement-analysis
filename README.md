@@ -1,9 +1,9 @@
 # Bank Statement Analysis
 
-<h3> Some Screen Captures </h3>
+### Demo
 
 
-![breakdown](https://user-images.githubusercontent.com/47830627/87481170-bbcc3280-c626-11ea-8620-d0b5e7d5a340.PNG)
+![Bank-Statement-Analysis-Google-C](https://user-images.githubusercontent.com/47830627/100645907-4216b600-3335-11eb-8e50-2667702b5a6a.gif)
 
 
 <h3> What is this project about ? </h3>
