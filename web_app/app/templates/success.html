@@ -1,0 +1,18 @@
+<!-- Page showing the update/delete/create of record to database is made successfully -->
+{% extends 'base.html' %}
+
+{% block title %}Bank Statement Analysis{% endblock %}
+
+{% block main %}
+
+<div class="container text-center">
+  {%if id is defined %}
+    <h1> Your update on record with Id {{id}} is made successfully</h1>
+  {%else%}
+    <h1> Your update is made successfully</h1>
+  {%endif%}
+  <h3> {{affectedRows}} rows are affected </h3>
+  <h3> <a href="{{ url_for('home.homepage') }}" style="color: rgb(157, 155, 236);">Back to Home</a> </h3>
+</div>
+
+{% endblock %}

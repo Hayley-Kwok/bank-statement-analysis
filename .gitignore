@@ -1,0 +1,12 @@
+build/
+dist/
+packages/
+node_modules/
+.DS_Store
+*.py.swp
+*.pyc
+.idea
+package-lock.json
+*.spec
+web_app/app/home/statements.db
+web_app/app/home/input.csv
