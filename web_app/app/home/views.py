@@ -1,11 +1,13 @@
 from flask import Flask, render_template, request, redirect
-import mysql.connector as mysql
 from . import home
 import sqlite3
+import os
+from .csv_input.db_conf import DBCONF
+from .csv_input.db_input import importToDb
+from .csv_input.read_data import generateDict
 
-
-table = "analysised"
-dbName = "C:\\Users\\wingk\\hayley\\projects\\bank-statement\\electron-flask\\web_app\\app\\home\\statements.db"
+table = DBCONF['table']
+dbName = DBCONF['dbName']
 
 #region Index Page
 '''
@@ -38,17 +40,17 @@ def month():
 	mycursor = conn.cursor()
 
 	#get all records for the selectedMonth
-	sql= f"SELECT * FROM {table} WHERE Month = '{selectedMonth}';"
+	sql= f"SELECT * FROM {table} WHERE Month = '{selectedMonth}' ORDER BY Date ASC;"
 	mycursor.execute(sql)
 	allResult = mycursor.fetchall()
 
 	#get debit records for the selectedMonth
-	sql= f"SELECT * FROM {table} WHERE Month= '{selectedMonth}' AND AMOUNT <0;"
+	sql= f"SELECT * FROM {table} WHERE Month= '{selectedMonth}' AND AMOUNT <0 ORDER BY Date ASC;"
 	mycursor.execute(sql)
 	debitResult = mycursor.fetchall()
 
 	#get credit records for the selectedMonth
-	sql= f"SELECT * FROM {table} WHERE Month= '{selectedMonth}' AND AMOUNT >0;"
+	sql= f"SELECT * FROM {table} WHERE Month= '{selectedMonth}' AND AMOUNT >0 ORDER BY Date ASC;"
 	mycursor.execute(sql)
 	creditResult = mycursor.fetchall()
 
@@ -165,9 +167,10 @@ def update():
 	conn = sqlite3.connect(dbName)
 	mycursor = conn.cursor()
 
-	sql= f"UPDATE {table} SET Date = '{request.form['date']}',Month = '{request.form['month']}',Store='{request.form['store']}',Amount = '{request.form['amount']}', Category = '{request.form['category']}',Bank = '{request.form['bank']}', Notes = '{request.form['notes']}', Excluded={eval(request.form['radio'])} WHERE id = '{request.form['id']}';"
+	sql=f"UPDATE {table} SET Date = ?,Month = ?,Store=?,Amount = ?, Category = ?,Bank = ?, Notes = ?, Excluded=? WHERE id = ?;"
+	values= (request.form['date'],request.form['month'],request.form['store'],request.form['amount'],request.form['category'],request.form['bank'],request.form['notes'],eval(request.form['radio']),request.form['id'])
 	
-	mycursor.execute(sql)
+	mycursor.execute(sql, values)
 	conn.commit()
 
 	mycursor.close
@@ -267,17 +270,17 @@ def saving():
 	return render_template('saving.html',groupedSavings=groupedSavings,salary=salary,bills=bills, sums=round(savingSum,2), savingsRecord=savingsRecord)
 #endregion
 
-#region error handling
-@home.errorhandler(404)
-def page_not_found(e):
-    return render_template('error.html',error="Page Not Found",message="What you are finding is not here."), 404
+@home.route("/db_input")
+def dbInput():
+    bank = request.args['bank']
+    filename = request.args['filename']
 
-@home.errorhandler(500)
-def server_error(e):
-    return render_template('error.html',error="Error Occuried",message="An error occuried."), 500
+    conn = sqlite3.connect(DBCONF['dbName'])
+    mycursor = conn.cursor()
+	
+    (data,months)= generateDict(bank, filename)
+    lineCount = importToDb(data,months,mycursor,conn)
 
-def handle_bad_request(e):
-    return render_template('error.html',error="Error Occuried",message="An error occuried."), 400
-
-home.register_error_handler(404, handle_bad_request)
-#endregion
+    mycursor.close
+    conn.close
+    return render_template("dbInput.html", lineCount=lineCount)
