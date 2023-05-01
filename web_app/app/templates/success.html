@@ -11,7 +11,8 @@
   {%else%}
     <h1> Your update is made successfully</h1>
   {%endif%}
-  <h3> {{affectedRows}} rows are affected </h3>
+  <h3> {{affectedRows}} rows are {%if addNewLines %}added {%else%}affected {%endif%}</h3>
+  
   <h3> <a href="{{ url_for('home.homepage') }}" style="color: rgb(157, 155, 236);">Back to Home</a> </h3>
 </div>
 

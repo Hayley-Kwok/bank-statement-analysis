@@ -12,3 +12,4 @@ web_app/app/home/statements.db
 web_app/app/home/old-statements.db
 web_app/app/home/input.csv
 statement/
+uploads/

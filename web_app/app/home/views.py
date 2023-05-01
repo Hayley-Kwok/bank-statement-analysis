@@ -8,6 +8,7 @@ from .csv_input.read_data import generateDict
 
 table = DBCONF['table']
 dbName = DBCONF['dbName']
+upload_folder = "./uploads"
 
 #region Index Page
 '''
@@ -194,7 +195,7 @@ def deleteRecord(id):
 	affectedRows = mycursor.rowcount
 	mycursor.close
 	conn.close
-	return render_template("success.html",affectedRows=affectedRows,id=id)
+	return render_template("success.html",affectedRows=affectedRows,id=id, addNewLines=False)
 #endregion
 
 #region add record
@@ -230,7 +231,7 @@ def addRecord():
 
 	mycursor.close
 	conn.close
-	return render_template("success.html",affectedRows=affectedRows)
+	return render_template("success.html",affectedRows=affectedRows, addNewLines=True)
 #endregion
 
 #region saving page
@@ -275,12 +276,28 @@ def dbInput():
     bank = request.args['bank']
     filename = request.args['filename']
 
-    conn = sqlite3.connect(dbName)
-    mycursor = conn.cursor()
-	
-    (data,months)= generateDict(bank, filename)
-    lineCount = importToDb(data,months,mycursor,conn)
-
-    mycursor.close
-    conn.close
+    lineCount = inputFileToDb(bank, filename)
     return render_template("dbInput.html", lineCount=lineCount)
+
+def inputFileToDb(bank, filepath):
+	conn = sqlite3.connect(dbName)
+	mycursor = conn.cursor()
+	
+	(data,months)= generateDict(bank, filepath)
+	lineCount = importToDb(data,months,mycursor,conn)
+	mycursor.close
+	conn.close
+	return lineCount
+
+@home.route("/select_file")
+def selectFile():
+    return render_template("selectFile.html")
+
+@home.route("/uploader", methods = ['POST'])
+def uploader():
+    f = request.files['file']
+    filepath = os.path.join(upload_folder, f.filename)
+    f.save(filepath) 
+    
+    lineCount = inputFileToDb("HSBC", filepath)
+    return render_template("success.html", affectedRows=lineCount, addNewLines =True)
