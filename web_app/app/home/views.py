@@ -275,7 +275,7 @@ def dbInput():
     bank = request.args['bank']
     filename = request.args['filename']
 
-    conn = sqlite3.connect(DBCONF['dbName'])
+    conn = sqlite3.connect(dbName)
     mycursor = conn.cursor()
 	
     (data,months)= generateDict(bank, filename)

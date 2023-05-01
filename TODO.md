@@ -5,8 +5,8 @@
     - redirect back to home if nothing in month anymore (after delete)
 
 
-# Mirgration
-- mirgrate to sqlite
+# Migration
+- migrate to sqlite
     - save the db file in environment folder
-- [x] mirgrate the db input part (connect the functionalities to FE)
+- [x] migrate the db input part (connect the functionalities to FE)
 - Better sql -> not escaped currently

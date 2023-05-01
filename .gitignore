@@ -9,5 +9,6 @@ node_modules/
 package-lock.json
 *.spec
 web_app/app/home/statements.db
+web_app/app/home/old-statements.db
 web_app/app/home/input.csv
 statement/

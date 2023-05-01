@@ -4,10 +4,11 @@
 
 import csv
 import sqlite3
+from app.home.csv_input.db_conf import DBCONF
 
-DBNAME = "C:\\Users\\wingk\\hayley\\projects\\bank-statement\\electron-flask\\web_app\\app\\home\\statements.db"
-table = "analysised"
+table = DBCONF["table"]
 
+# Migration function
 def importFromCsv(filename):
     conn = sqlite3.connect(DBNAME)
     cursor = conn.cursor()
@@ -21,8 +22,8 @@ def importFromCsv(filename):
     conn.commit()
     conn.close()
 
-def createTable():
-	conn = sqlite3.connect(DBNAME)
+def createAnalysisedTable():
+	conn = sqlite3.connect(DBCONF["dbName"])
 
 	cursor = conn.cursor()
 	cursor.execute(f"DROP TABLE IF EXISTS {table}")
@@ -43,8 +44,28 @@ def createTable():
 	conn.commit()
 	conn.close()
 
+def checkIfTableExist(tableName = table):
+    conn = sqlite3.connect(DBCONF["dbName"])
+    cursor = conn.cursor()
+    sql = f"SELECT name FROM sqlite_master WHERE type='table' AND name='{tableName}';"
+    cursor.execute(sql)
+    allResult = cursor.fetchall()
+     
+    cursor.close
+    conn.close
+    return allResult
+
+def deleteTable():
+     conn = sqlite3.connect(DBCONF["dbName"])
+     cursor = conn.cursor()
+     cursor.execute(f"DROP TABLE IF EXISTS {table}")
+     
+     cursor.close
+     conn.close
 
 if __name__ == "__main__":
-    createTable()
-    importFromCsv(filename="C:\\Users\\wingk\\Downloads\\analysised_mysql.csv")
-    importFromCsv(filename="C:\\Users\\wingk\\Downloads\\analysised_mysql_2.csv")
+    # createTable()
+	deleteTable()
+	print(len(checkIfTableExist())) 
+    # importFromCsv(filename="C:\\Users\\wingk\\Downloads\\analysised_mysql.csv")
+    # importFromCsv(filename="C:\\Users\\wingk\\Downloads\\analysised_mysql_2.csv")
