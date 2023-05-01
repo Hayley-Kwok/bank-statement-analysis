@@ -1,5 +1,6 @@
 # Bank Statement Analysis
 
+*This is the version before the mirgration to electron and SQLite. This version is the work in progress version in the past and uses MySQL. Please see main branch for the standalone version of the project.
 ### Demo
 
 
